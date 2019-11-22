@@ -1,0 +1,24 @@
+{
+  "name": "TP-Integrador---Grupo-7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "drCasa.js",
+  "dependencies": {
+    "jest": "^24.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maurolaurenzi/TP-Integrador---Grupo-7.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maurolaurenzi/TP-Integrador---Grupo-7/issues"
+  },
+  "homepage": "https://github.com/maurolaurenzi/TP-Integrador---Grupo-7#readme"
+}

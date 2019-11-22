@@ -14,7 +14,6 @@ EnfermedadInfecciosa.prototype.esAgresiva = function(persona){
 EnfermedadInfecciosa.prototype.reproducirse = function(){
     this.celulasAmenazadas *= 2
 };
-
 //Modelo la enfermedad autoinmune
 function EnfermedadAutoinmune(celulasAmenazadas,diasAfectados){
     this.celulasAmenazadas = celulasAmenazadas,
@@ -53,4 +52,6 @@ Persona.prototype.vivirUnDia = function(){
     this.enfermedades.forEach(enfermedad => enfermedad.afectar(this))
 };
 
-
+module.exports = EnfermedadInfecciosa;
+module.exports = EnfermedadAutoinmune;
+module.exports = Persona;
