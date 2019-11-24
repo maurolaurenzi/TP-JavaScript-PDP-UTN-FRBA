@@ -41,7 +41,11 @@ Persona.prototype.contraerEnfermedad = function(enfermedad){
 };
 
 Persona.prototype.aumentarTemperatura = function(aumento){
+    if(aumento + this.temperatura <= 45){
     this.temperatura += aumento
+}else{
+    this.temperatura = 45
+}
 };
 
 Persona.prototype.destruirCelulas = function(num){
@@ -52,6 +56,12 @@ Persona.prototype.vivirUnDia = function(){
     this.enfermedades.forEach(enfermedad => enfermedad.afectar(this))
 };
 
-module.exports = EnfermedadInfecciosa;
-module.exports = EnfermedadAutoinmune;
-module.exports = Persona;
+Persona.prototype.estaEnComa = function(){
+    return this.temperatura == 45 || this.celulasTotales < 1000000
+};
+
+module.exports = {
+    EnfermedadInfecciosa: EnfermedadInfecciosa,
+    EnfermedadAutoinmune: EnfermedadAutoinmune,
+    Persona: Persona
+} ;
