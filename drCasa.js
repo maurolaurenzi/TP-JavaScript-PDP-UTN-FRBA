@@ -1,7 +1,31 @@
+//Modelo la enfermedad 
+var Enfermedad = {
+    this.celulasAmenazadas;
+    this.tipo;
+    this.nombre;
+}
+
+Enfermedad.prototype.atenuar = function(n){
+    this.celulasAmenazadas -= n;
+}
+
+Enfermedad.prototype.esAgresiva = function(persona){
+    this.tipo.esAgresiva(persona);
+}
+
+//Enfermedad.prototype.afectar = function(persona)
+
+
 //Modelo la enfermedad infecciosa con una funcion constructora, donde se definen propiedades o atributos
-function EnfermedadInfecciosa(celulasAmenazadas){
-    this.celulasAmenazadas = celulasAmenazadas
-};
+//gg: Modifiqué la manera en que se define el modelo para heredar de enfermedad
+var EnfermedadInfecciosa = Object.create(Enfermedad,
+{
+    celulasAmenazadas: {value: celulasAmenazadas}
+});
+
+//function EnfermedadInfecciosa(celulasAmenazadas){
+//    this.celulasAmenazadas = celulasAmenazadas
+//};
 
 EnfermedadInfecciosa.prototype.afectar = function(persona){ //En los prototipos definimos metodos
     persona.aumentarTemperatura(this.celulasAmenazadas/1000)
@@ -14,11 +38,19 @@ EnfermedadInfecciosa.prototype.esAgresiva = function(persona){
 EnfermedadInfecciosa.prototype.reproducirse = function(){
     this.celulasAmenazadas *= 2
 };
+
+
 //Modelo la enfermedad autoinmune
-function EnfermedadAutoinmune(celulasAmenazadas,diasAfectados){
-    this.celulasAmenazadas = celulasAmenazadas,
-    this.diasAfectados = diasAfectados
-};
+//gg: Modifiqué la manera en que se define el modelo para heredar de enfermedad
+var EnfermedadAutoinmune = Object.create(Enfermedad, {
+    celulasAmenazadas: {value: celulasAmenazadas},
+    diasAfectados: {value: diasAfectados}
+});
+
+//function EnfermedadAutoinmune(celulasAmenazadas,diasAfectados){
+//    this.celulasAmenazadas = celulasAmenazadas;
+//    this.diasAfectados = diasAfectados
+//};
 
 EnfermedadAutoinmune.prototype.afectar = function(persona){
     persona.destruirCelulas(this.celulasAmenazadas);
@@ -31,8 +63,8 @@ EnfermedadAutoinmune.prototype.esAgresiva = function(persona){
 
 //Modelo a Persona
 function Persona(celulasTotales,temperatura,enfermedades){
-    this.celulasTotales = celulasTotales,
-    this.temperatura = temperatura,
+    this.celulasTotales = celulasTotales;
+    this.temperatura = temperatura;
     this.enfermedades = enfermedades
 };
 
@@ -60,8 +92,35 @@ Persona.prototype.estaEnComa = function(){
     return this.temperatura == 45 || this.celulasTotales < 1000000
 };
 
+Persona.prototype.tomaRemedio = function(_dosisRemedio){
+    this.enfermedades = this.enfermedades.map(this.enfermedades.atenuar(15 * _dosisRemedio)
+};
+
+// GG: Modelo Médico
+var Medico = new Persona();
+
+Medico.prototype.atender = function(_paciente, _dosisRemedio){
+    _paciente.tomaRemedio(_dosisRemedio)
+};
+    
+Medico.prototype.contraer = function(_enfermedad){
+    Persona.contraer.call(this,_enfermedad);
+    Persona.tomaRemedio.call(this,100);
+};
+
+var JefeMedico = new Medico(){
+    this.aCargo = new Array();   
+};
+    
+JefeMedico.prototype.atender = function(_paciente, _dosisRemedio){
+    Medico.atender.call(this.aCargo.pop(),_paciente, _dosisRemedio);
+};
+    
+    
+    
 module.exports = {
     EnfermedadInfecciosa: EnfermedadInfecciosa,
     EnfermedadAutoinmune: EnfermedadAutoinmune,
-    Persona: Persona
-} ;
+    Persona: Persona,
+    Medico: Medico                              // GG: Agrego Medico para exportar
+};
