@@ -1,6 +1,6 @@
-const EnfermedadInfecciosa = require('./drCasa').EnfermedadInfecciosa;
-const EnfermedadAutoInmune = require('./drCasa').EnfermedadAutoInmune;
-const Persona = require('./drCasa').Persona;
+const EnfermedadInfecciosa = require('./drCasa1').EnfermedadInfecciosa;
+const EnfermedadAutoInmune = require('./drCasa1').EnfermedadAutoInmune;
+const Persona = require('./drCasa1').Persona;
 
 const otitis = new EnfermedadInfecciosa(100);
 const lupus = new EnfermedadAutoInmune(1000,0);
