@@ -2,11 +2,14 @@
   "name": "TP-Integrador---Grupo-7",
   "version": "1.0.0",
   "description": "",
-  "main": "drCasa.js",
+  "main": "drCasa2.js",
   "dependencies": {
+    "chai": "^4.2.0",
+    "puppeteer": "^2.0.0"
+  },
+  "devDependencies": {
     "jest": "^24.9.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "jest"
   },
