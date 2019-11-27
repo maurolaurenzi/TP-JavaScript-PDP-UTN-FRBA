@@ -1,40 +1,32 @@
-//Modelo la enfermedad 
+//Modelo la Enfermedad abstracta
 var Enfermedad = function(celulasAmenazadas){
-    this.celulasAmenazadas; //M: La keyword "this" se usa para funciones, por lo que Enfermedad deberia ser
-    //una funcion constructora, no una var
-    this.tipo;
-    this.nombre;
+    this.celulasAmenazadas = celulasAmenazadas; 
 };
 
-Enfermedad.prototype.atenuar = function(n){
+Enfermedad.prototype.atenuarse = function(n){
     this.celulasAmenazadas -= n;
 };
 
 
-Enfermedad.prototype.esAgresiva = function(persona){
-    this.tipo.esAgresiva(persona);
+Enfermedad.prototype.esAgresiva = function(persona){ //metodo abstracto
 };
 
-//Enfermedad.prototype.afectar = function(persona)
+Enfermedad.prototype.afectar = function(persona){ //metodo abstracto
 
+};
 
-//Modelo la enfermedad infecciosa con una funcion constructora, donde se definen propiedades o atributos
-//gg: Modifiqué la manera en que se define el modelo para heredar de enfermedad
+Enfermedad.prototype.estaCurada = function(){
+    return this.celulasAmenazadas <= 0
+};
+
+//Se define a EnfermedadInfecciosa como una funcion constructora que hereda de Enfermedad
 var EnfermedadInfecciosa = function(celulasAmenazadas){
-    Enfermedad.call(this,celulasAmenazadas);
-    //this.celulasAmenazadas = celulasAmenazadas;
+    Enfermedad.call(this,celulasAmenazadas) 
 };
 
 EnfermedadInfecciosa.prototype = Object.create(Enfermedad.prototype);
 
-EnfermedadInfecciosa.prototype.contructor = EnfermedadInfecciosa;
-
-/*EnfermedadInfecciosa.prototype.init = function(celulasAmenazadas){
-    this.celulasAmenazadas = celulasAmenazadas;
-};
-*/
-
-EnfermedadInfecciosa.prototype.afectar = function(persona){ //En los prototipos definimos metodos
+EnfermedadInfecciosa.prototype.afectar = function(persona){ //Se sobre-escribe el metodo abstracto
     persona.aumentarTemperatura(this.celulasAmenazadas/1000);
 };
 
@@ -46,57 +38,31 @@ EnfermedadInfecciosa.prototype.reproducirse = function(){
     this.celulasAmenazadas *= 2;
 };
 
-
-//Modelo la enfermedad autoinmune
-//gg: Modifiqué la manera en que se define el modelo para heredar de enfermedad
-
-
-var EnfermedadAutoinmune = function(celulasAmenazadas){
+var EnfermedadAutoInmune = function(celulasAmenazadas){
     Enfermedad.call(this,celulasAmenazadas);
     this.diasAfectados = 0;
 };
 
-EnfermedadAutoinmune.prototype = Object.create(Enfermedad.prototype);
+EnfermedadAutoInmune.prototype = Object.create(Enfermedad.prototype);
 
-EnfermedadAutoinmune.prototype.constructor = EnfermedadAutoinmune;
-
-/*
-EnfermedadAutoinmune.prototype.init = function(celulasAmenazadas,diasAfectados){
-    this.celulasAmenazadas = celulasAmenazadas;
-    this.diasAfectados = diasAfectados;
-};
-*/
-
-EnfermedadAutoinmune.prototype.afectar = function(persona){
+EnfermedadAutoInmune.prototype.afectar = function(persona){
     persona.perderCelulas(this.celulasAmenazadas);
     this.diasAfectados += 1;
 };
 
-EnfermedadAutoinmune.prototype.esAgresiva = function(persona){
+EnfermedadAutoInmune.prototype.esAgresiva = function(persona){
     return this.diasAfectados > 30;
-};
-
-var laMuerte = function(){
-    Enfermedad.call(this);
-};
-
-laMuerte.prototype = Object.create(Enfermedad.prototype);
-
-laMuerte.prototype.constructor = laMuerte;
-
-laMuerte.prototype.afectar = function(persona){
-    persona.aumentarTemperatura(-1 * persona.temperatura);
 };
 
 //Modelo a Persona
 function Persona(celulasTotales,temperatura,enfermedades){
-    this.celulasTotales = celulasTotales;
-    this.temperatura = temperatura;
-    this.enfermedades = enfermedades;
+    this.celulasTotales = celulasTotales,
+    this.temperatura = temperatura,
+    this.enfermedades = enfermedades
 };
 
 Persona.prototype.contraer = function(enfermedad){
-    this.enfermedades.push(enfermedad);
+    this.enfermedades.push(enfermedad)
 };
 
 Persona.prototype.aumentarTemperatura = function(aumento){
@@ -120,52 +86,71 @@ Persona.prototype.estaEnComa = function(){
 };
 
 Persona.prototype.tomaRemedio = function(_dosisRemedio){
-    this.enfermedades.forEach(enfermedad=>enfermedad.atenuar(15 * _dosisRemedio));
+    this.enfermedades.forEach(enfermedad=>enfermedad.atenuarse(15 * _dosisRemedio))
 };
 
+Persona.prototype.estaCurado = function(){
+    return this.enfermedades.every(function(enfermedad){
+        return enfermedad.estaCurada()
+    })
+};
 // GG: Modelo Médico
-var Medico = function () {
-    Persona.call(this);
+var Medico = function (celulasTotales, temperatura, enfermedades, dosis) {
+    Persona.call(this,celulasTotales,temperatura,enfermedades);
+    this.dosis = dosis
 };
 
 Medico.prototype = Object.create(Persona.prototype);
 
-Medico.prototype.constructor = Medico;
-
-
-/*
-new Persona(); //M: Al usar "new", estas definiendo a Medico como un objeto individual del tipo Persona, 
-//cuando deberia ser un constructor a partir del cual se puedan crear objetos, para lo cual hay que definirlo
-//como funcion constructora.
-*/
-Medico.prototype.atender = function(_paciente, _dosisRemedio){
-    _paciente.tomaRemedio(_dosisRemedio)
+Medico.prototype.atender = function(_paciente){
+    _paciente.tomaRemedio(this.dosis)
 };
     
-Medico.prototype.contraer = function(_enfermedad){
-    Persona.contraer.call(this,_enfermedad);
-    Persona.tomaRemedio.call(this,100);
+Medico.prototype.contraer = function(_enfermedad){ //Se sobre-escribe el metodo heredado de Persona
+    Persona.prototype.contraer.call(this,_enfermedad); //Analogo al super() visto en Wollok
+    this.atender(this) //Se le agrega comportamiento al metodo heredado: se atiende a si mismo.
 };
 
-var JefeMedico = function(){
-    Medico.call(this);
-    this.aCargo = new Array();   
+//Se modelan los Jefes de Departamento
+var JefeDepartamento = function(celulasTotales, temperatura, enfermedades, dosis, subordinados){
+    Medico.call(this,celulasTotales, temperatura, enfermedades, dosis);
+    this.aCargo = subordinados   
 };
 
-JefeMedico.prototype = Object.create(Medico.prototype);
+JefeDepartamento.prototype = Object.create(Medico.prototype);
 
-JefeMedico.prototype.contructor = JefeMedico;
-    
-JefeMedico.prototype.atender = function(_paciente, _dosisRemedio){
-    Medico.atender.call(this.aCargo.pop(),_paciente, _dosisRemedio);
+JefeDepartamento.prototype.atender = function(_paciente){
+    //Al no existir el metodo anyOne() hay que escribir todo esto para obtener un subordinado random...
+    this.aCargo[Math.floor(Math.random() * this.aCargo.length)].atender(_paciente)
 };
     
+JefeDepartamento.prototype.sumarSubordinado = function(subordinado){
+    this.aCargo.push(subordinado)
+};
+
+//Modelo a La Muerte como un WKO:
+const muerte = {
+    celulasAmenazadas: 0,
+
+    afectar: function(persona){
+        persona.temperatura = 0
+    },
     
-    
+    esAgresiva: function(persona){
+        return true
+    },
+
+    atenuarse: function(cantidad){
+        this.celulasAmenazadas = 0
+    }
+};
+
 module.exports = {
+    Enfermedad: Enfermedad,
     EnfermedadInfecciosa: EnfermedadInfecciosa,
-    EnfermedadAutoinmune: EnfermedadAutoinmune,
+    EnfermedadAutoInmune: EnfermedadAutoInmune,
     Persona: Persona,
     Medico: Medico,                              // GG: Agrego Medico para exportar
-    JefeMedico: JefeMedico
+    JefeDepartamento: JefeDepartamento,
+    muerte : muerte
 };
