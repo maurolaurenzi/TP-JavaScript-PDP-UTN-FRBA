@@ -1,20 +1,20 @@
 const EnfermedadInfecciosa = require('./drCasa').EnfermedadInfecciosa;
-const EnfermedadAutoinmune = require('./drCasa').EnfermedadAutoinmune;
+const EnfermedadAutoInmune = require('./drCasa').EnfermedadAutoInmune;
 const Persona = require('./drCasa').Persona;
 
-var otitis = new EnfermedadInfecciosa(100);
-var lupus = new EnfermedadAutoinmune(1000,0);
-var malaria = new EnfermedadInfecciosa(500); 
-var otraMalaria = new EnfermedadInfecciosa(800);
-var logan = new Persona(3000000,36,[malaria,otitis,lupus]);
-var frank = new Persona(3500000,36,[]);
+const otitis = new EnfermedadInfecciosa(100);
+const lupus = new EnfermedadAutoInmune(1000,0);
+const malaria = new EnfermedadInfecciosa(500); 
+const otraMalaria = new EnfermedadInfecciosa(800);
+const logan = new Persona(3000000,36,[malaria,otitis,lupus]);
+const frank = new Persona(3500000,36,[]);
 function obtenerMaximo(array){
   return Math.max(null,array)
 }
 
 describe('Tests sobre Enfermedadades', () => {
     test('Frank contrae otraMalaria', () => {
-      frank.contraerEnfermedad(otraMalaria);
+      frank.contraer(otraMalaria);
       expect(frank.enfermedades).toContain(otraMalaria)
     });
 
@@ -35,7 +35,7 @@ describe('Tests sobre Enfermedadades', () => {
 
     test('Logan vive 31 dias',()=>{
       var times = 31;
-      for(var i = 1; i < times; i++){
+      for(var i = 0; i < times; i++){
         logan.vivirUnDia()
       };
       const enfermedadesAgresivas = logan.enfermedades.filter(enfermedad=>enfermedad.esAgresiva(logan));

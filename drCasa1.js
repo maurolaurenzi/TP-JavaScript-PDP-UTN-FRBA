@@ -15,17 +15,17 @@ EnfermedadInfecciosa.prototype.reproducirse = function(){
     this.celulasAmenazadas *= 2
 };
 //Modelo la enfermedad autoinmune
-function EnfermedadAutoinmune(celulasAmenazadas,diasAfectados){
+function EnfermedadAutoInmune(celulasAmenazadas,diasAfectados){
     this.celulasAmenazadas = celulasAmenazadas,
     this.diasAfectados = diasAfectados
 };
 
-EnfermedadAutoinmune.prototype.afectar = function(persona){
-    persona.destruirCelulas(this.celulasAmenazadas);
+EnfermedadAutoInmune.prototype.afectar = function(persona){
+    persona.perderCelulas(this.celulasAmenazadas);
     this.diasAfectados += 1
 };
 
-EnfermedadAutoinmune.prototype.esAgresiva = function(persona){
+EnfermedadAutoInmune.prototype.esAgresiva = function(persona){
     return this.diasAfectados > 30
 };
 
@@ -36,7 +36,7 @@ function Persona(celulasTotales,temperatura,enfermedades){
     this.enfermedades = enfermedades
 };
 
-Persona.prototype.contraerEnfermedad = function(enfermedad){
+Persona.prototype.contraer = function(enfermedad){
     this.enfermedades.push(enfermedad)
 };
 
@@ -48,7 +48,7 @@ Persona.prototype.aumentarTemperatura = function(aumento){
 }
 };
 
-Persona.prototype.destruirCelulas = function(num){
+Persona.prototype.perderCelulas = function(num){
     this.celulasTotales -= num
 };
 
@@ -62,6 +62,6 @@ Persona.prototype.estaEnComa = function(){
 
 module.exports = {
     EnfermedadInfecciosa: EnfermedadInfecciosa,
-    EnfermedadAutoinmune: EnfermedadAutoinmune,
+    EnfermedadAutoInmune: EnfermedadAutoInmune,
     Persona: Persona
 } ;
